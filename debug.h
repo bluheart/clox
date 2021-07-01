@@ -4,6 +4,6 @@
 #include "chunk.h"
 
 void disassembleChunk(Chunk* chunk, const char* name);
-int disassembleInstruction(Chunk* chunk, int offset);
+uint16_t disassembleInstruction(Chunk* chunk, uint16_t offset);
 
 #endif
