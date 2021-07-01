@@ -24,10 +24,10 @@ typedef struct {
   uint16_t capacity;
 } Chunk;
 
-void initChunk(Chunk* chunk);
-void freeChunk(Chunk* chunk);
-void writeChunk(Chunk* chunk, uint8_t byte, uint16_t line);
-void writeConstant(Chunk* chunk, Value value, uint16_t line);
-uint16_t addConstant(Chunk* chunk, Value value);
+void init_chunk(Chunk* chunk);
+void free_chunk(Chunk* chunk);
+void write_chunk(Chunk* chunk, uint8_t byte, uint16_t line);
+void write_constant(Chunk* chunk, Value value, uint16_t line);
+uint16_t add_constant(Chunk* chunk, Value value);
 
 #endif

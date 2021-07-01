@@ -3,23 +3,23 @@
 #include "chunk.h"
 #include "memory.h"
 
-void initChunk(Chunk* chunk) {
+void init_chunk(Chunk* chunk) {
   chunk->count = 0;
   chunk->capacity = 0;
   chunk->line_index = 0;
   chunk->code = NULL;
   chunk->lines = NULL;
-  initValueArray(&chunk->constants);
+  init_value_array(&chunk->constants);
 }
 
-void freeChunk(Chunk* chunk) {
+void free_chunk(Chunk* chunk) {
   FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
   FREE_ARRAY(int, chunk->lines, chunk->capacity);
-  freeValueArray(&chunk->constants);
-  initChunk(chunk);
+  free_value_array(&chunk->constants);
+  init_chunk(chunk);
 }
 
-void writeChunk(Chunk* chunk, uint8_t byte, uint16_t line) {
+void write_chunk(Chunk* chunk, uint8_t byte, uint16_t line) {
   if (chunk->capacity < chunk->count + 1) {
     int oldCapacity = chunk->capacity;
     chunk->capacity = GROW_CAPACITY(oldCapacity);
@@ -40,21 +40,21 @@ void writeChunk(Chunk* chunk, uint8_t byte, uint16_t line) {
   chunk->count++;
 }
 
-void writeConstant(Chunk* chunk, Value value, uint16_t line) {
-  int offset = addConstant(chunk, value);
+void write_constant(Chunk* chunk, Value value, uint16_t line) {
+  int offset = add_constant(chunk, value);
   if (offset < 256) {
-    writeChunk(chunk, OP_CONSTANT, line);
-    writeChunk(chunk, offset, line);
+    write_chunk(chunk, OP_CONSTANT, line);
+    write_chunk(chunk, offset, line);
   }
   else {
-    writeChunk(chunk, OP_CONSTANT_LONG, line);
-    writeChunk(chunk, offset & 0xff, line);
-    writeChunk(chunk, (offset & 0xff00) >> 8, line);
-    writeChunk(chunk, (offset & 0xff0000) >> 16, line);
+    write_chunk(chunk, OP_CONSTANT_LONG, line);
+    write_chunk(chunk, offset & 0xff, line);
+    write_chunk(chunk, (offset & 0xff00) >> 8, line);
+    write_chunk(chunk, (offset & 0xff0000) >> 16, line);
   }
 }
 
-uint16_t addConstant(Chunk* chunk, Value value) {
-  writeValueArray(&chunk->constants, value);
+uint16_t add_constant(Chunk* chunk, Value value) {
+  write_value_array(&chunk->constants, value);
   return chunk->constants.count - 1;
 }
